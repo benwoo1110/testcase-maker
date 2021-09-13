@@ -15,7 +15,7 @@ EXTRAS["dev"] = EXTRAS["lint"]
 
 setup(
     name="testcase-maker",
-    version="0.1.0-dev0",
+    version="0.1.0",
     author="benwoo1110",
     author_email="wben1110@gmail.com",
     description="Competitive programming testcases made easy!",
