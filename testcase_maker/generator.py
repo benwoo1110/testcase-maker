@@ -36,17 +36,17 @@ class TestcaseGenerator:
                 result = resolver.resolve(subtask.builder)
                 input_file = self.target_folder.joinpath(f"{subtask.name}-{case_no}.in")
                 print(f"Saving to '{input_file}'...")
-                with open(input_file, 'w', newline="\n") as input_buffer:
+                with open(input_file, "w", newline="\n") as input_buffer:
                     input_buffer.write(result)
 
                 print("Time taken", timeit.timeit(lambda: self.execute(result), number=1))
-                output = self.execute(result).decode('UTF-8')
+                output = self.execute(result).decode("UTF-8")
 
                 output_file = self.target_folder.joinpath(f"{subtask.name}-{case_no}.out")
                 print(f"Saving to '{output_file}'...")
-                with open(output_file, 'w', newline="\n") as output_buffer:
+                with open(output_file, "w", newline="\n") as output_buffer:
                     output_buffer.write(output)
 
-    def execute(self, result, ) -> bytes:
+    def execute(self, result) -> bytes:
         p = Popen(["python", str(self.answer_script)], stdout=PIPE, stdin=PIPE, stderr=PIPE)
         return p.communicate(input=result.encode())[0]

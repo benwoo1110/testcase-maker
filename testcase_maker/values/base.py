@@ -9,7 +9,6 @@ if TYPE_CHECKING:
 
 @attr.define()
 class BaseValue(ABC):
-
     def generate(self, resolver: "Resolver") -> Any:
         raise NotImplementedError
 
