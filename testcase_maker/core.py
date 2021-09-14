@@ -76,7 +76,7 @@ class TestcaseGenerator:
                 result = resolver.resolve(subtask.builder)
                 input_file = self.target_folder.joinpath(f"{subtask.name}-{case_no}.in")
                 print(f"Saving to '{input_file}'...")
-                with open(input_file, 'w') as input_buffer:
+                with open(input_file, 'w', newline="\n") as input_buffer:
                     input_buffer.write(result)
 
                 print("Time taken", timeit.timeit(lambda: self.execute(result), number=1))
@@ -84,7 +84,7 @@ class TestcaseGenerator:
 
                 output_file = self.target_folder.joinpath(f"{subtask.name}-{case_no}.out")
                 print(f"Saving to '{output_file}'...")
-                with open(output_file, 'w') as output_buffer:
+                with open(output_file, 'w', newline="\n") as output_buffer:
                     output_buffer.write(output)
 
     def execute(self, result, ) -> bytes:
