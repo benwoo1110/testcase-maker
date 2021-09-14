@@ -2,10 +2,7 @@ from typing import List, Any, Union, TYPE_CHECKING, Dict
 
 import attr
 
-from testcase_maker.values.base import BaseValue, ValueContainer
-from testcase_maker.values.constant import Constant
-from testcase_maker.values.loop_value import LoopValue
-from testcase_maker.values.named_value import NamedValue
+from testcase_maker.values import BaseValue, ValueContainer, NamedValue, Constant, LoopValue
 
 if TYPE_CHECKING:
     from testcase_maker.resolver import Resolver

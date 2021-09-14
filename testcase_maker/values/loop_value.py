@@ -2,7 +2,7 @@ from typing import TYPE_CHECKING
 
 import attr
 
-from testcase_maker.values.base import ValueContainer
+from testcase_maker.values import ValueContainer
 
 if TYPE_CHECKING:
     from testcase_maker.resolver import Resolver

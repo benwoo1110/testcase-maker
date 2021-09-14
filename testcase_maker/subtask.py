@@ -3,8 +3,7 @@ from typing import Dict, TYPE_CHECKING
 import attr
 
 if TYPE_CHECKING:
-    from testcase_maker.values.base import BaseValue
-    from testcase_maker.values.value_group import ValueGroup
+    from testcase_maker.values import BaseValue, ValueGroup
 
 
 @attr.define()

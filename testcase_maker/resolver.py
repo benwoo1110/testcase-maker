@@ -2,8 +2,7 @@ from typing import Dict, Any, Optional, Union
 
 import attr
 
-from testcase_maker.values.base import BaseValue
-from testcase_maker.values.named_value import NamedValue
+from testcase_maker.values import BaseValue, NamedValue
 
 
 @attr.define()

@@ -9,7 +9,7 @@ from testcase_maker.resolver import Resolver
 from testcase_maker.subtask import Subtask
 
 if TYPE_CHECKING:
-    from testcase_maker.values.value_group import ValueGroup
+    from testcase_maker.values import ValueGroup
 
 
 @attr.define()
