@@ -8,7 +8,7 @@ from testcase_maker.values.loop_value import LoopValue
 from testcase_maker.values.named_value import NamedValue
 
 if TYPE_CHECKING:
-    from testcase_maker.core import Resolver
+    from testcase_maker.resolver import Resolver
 
 
 @attr.define()
