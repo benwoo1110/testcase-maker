@@ -9,7 +9,7 @@ if TYPE_CHECKING:
 
 
 @attr.define()
-class VarRef(BaseValue):
+class ValRef(BaseValue):
     var_name: Any = attr.ib()
 
     def generate(self, resolver: "Resolver") -> Any:
