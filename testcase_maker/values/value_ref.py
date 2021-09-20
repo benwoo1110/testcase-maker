@@ -9,9 +9,9 @@ if TYPE_CHECKING:
 
 
 @attr.define()
-class ValRef(BaseValue):
-    var_name: Any = attr.ib()
+class ValueRef(BaseValue):
+    name: Any = attr.ib()
 
     def generate(self, resolver: "Resolver") -> Any:
-        var_name = resolver.resolve(self.var_name)
+        var_name = resolver.resolve(self.name)
         return resolver.get_value(var_name)
