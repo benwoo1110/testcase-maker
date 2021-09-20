@@ -1,12 +1,12 @@
-import timeit
+import tempfile
 from pathlib import Path
-from subprocess import Popen, PIPE
 from typing import List, TYPE_CHECKING
 
 import attr
 
 from testcase_maker.resolver import Resolver
 from testcase_maker.subtask import Subtask
+from testcase_maker.executors import BaseExecutor, PythonExecutor
 
 if TYPE_CHECKING:
     from testcase_maker.values import ValueGroup
@@ -16,7 +16,11 @@ if TYPE_CHECKING:
 class TestcaseGenerator:
     target_folder: Path = attr.ib(converter=Path)
     answer_script: Path = attr.ib(converter=Path)
+    script_executor: "BaseExecutor" = attr.ib(default=None)
     subtasks: List[Subtask] = attr.ib(factory=list)
+
+    def __attrs_post_init__(self):
+        self.script_executor = PythonExecutor()  # TODO get based on file extension.
 
     def new_subtask(self, builder: "ValueGroup", no_of_testcase: int, name: str = None) -> Subtask:
         if not name:
@@ -32,21 +36,20 @@ class TestcaseGenerator:
         for subtask in self.subtasks:
             for case_no in range(1, subtask.no_of_testcase + 1):
                 print(f"Generating subtask '{subtask.name}', testcase '{case_no}'...")
+
+                stdin_file = self.target_folder.joinpath(f"{subtask.name}-{case_no}.in")
                 resolver = Resolver(subtask.override_name_values)
-                result = resolver.resolve(subtask.builder)
-                input_file = self.target_folder.joinpath(f"{subtask.name}-{case_no}.in")
-                print(f"Saving to '{input_file}'...")
-                with open(input_file, "w", newline="\n") as input_buffer:
-                    input_buffer.write(result)
+                stdin = resolver.resolve(subtask.builder)
 
-                print("Time taken", timeit.timeit(lambda: self.execute(result), number=1))
-                output = self.execute(result).decode("UTF-8")
+                with open(stdin_file, "w", newline="\n") as input_buffer:
+                    input_buffer.write(stdin)
+                print(f"Saved '{stdin_file}'")
 
-                output_file = self.target_folder.joinpath(f"{subtask.name}-{case_no}.out")
-                print(f"Saving to '{output_file}'...")
-                with open(output_file, "w", newline="\n") as output_buffer:
-                    output_buffer.write(output)
+                stdout_file = self.target_folder.joinpath(f"{subtask.name}-{case_no}.out")
+                with tempfile.TemporaryDirectory() as tmpdir:
+                    exec_filename = self.script_executor.compile(tmpdir, self.answer_script)
+                    stdout = self.script_executor.execute(exec_filename, stdin).decode("UTF-8")
 
-    def execute(self, result) -> bytes:
-        p = Popen(["python", str(self.answer_script)], stdout=PIPE, stdin=PIPE, stderr=PIPE)
-        return p.communicate(input=result.encode())[0]
+                with open(stdout_file, "w", newline="\n") as output_buffer:
+                    output_buffer.write(stdout)
+                print(f"Saved '{stdout_file}'")
