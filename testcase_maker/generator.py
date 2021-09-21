@@ -4,10 +4,10 @@ from typing import List, TYPE_CHECKING
 
 import attr
 
+from testcase_maker.executor_manager import get_executor_for_script
 from testcase_maker.resolver import Resolver
 from testcase_maker.subtask import Subtask
 from testcase_maker.executor import Executor
-from testcase_maker.executors import PythonExecutor
 
 if TYPE_CHECKING:
     from testcase_maker.values import ValueGroup
@@ -16,13 +16,14 @@ if TYPE_CHECKING:
 @attr.define()
 class TestcaseGenerator:
     values: "ValueGroup" = attr.ib()
-    output_dir: Path = attr.ib(converter=Path)  # TODO Add a default
+    output_dir: Path = attr.ib(converter=Path)  # TODO Add a default path.
     answer_script: Path = attr.ib(default=None, converter=Path)  # TODO Handle if its None.
     script_executor: "Executor" = attr.ib(default=None)
     subtasks: List[Subtask] = attr.ib(factory=list)
+    # TODO Custom stdin and stdout file name format.
 
     def __attrs_post_init__(self):
-        self.script_executor = PythonExecutor()  # TODO get based on file extension.
+        self.script_executor = get_executor_for_script(self.answer_script)
 
     def new_subtask(self, no_of_testcase: int, name: str = None) -> Subtask:
         if not name:
