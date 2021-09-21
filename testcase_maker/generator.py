@@ -17,7 +17,7 @@ if TYPE_CHECKING:
 class TestcaseGenerator:
     values: "ValueGroup" = attr.ib()
     output_dir: Path = attr.ib(converter=Path)  # TODO Add a default path.
-    answer_script: Path = attr.ib(default=None, converter=Path)  # TODO Handle if its None.
+    answer_script: Path = attr.ib(default=None, converter=Path)
     script_executor: "Executor" = attr.ib(default=None)
     subtasks: List[Subtask] = attr.ib(factory=list)
     stdin_filename_format: str = attr.ib(default="{}-{}.in")
@@ -60,6 +60,10 @@ class TestcaseGenerator:
 
     def generate_stdout(self, override: bool = False):
         self.output_dir.mkdir(parents=True, exist_ok=True)
+
+        if not self.answer_script:
+            print("Unable to generate stdout as there is no answer script specified.")
+            return
 
         for subtask in self.subtasks:
             for testcase_no in range(1, subtask.no_of_testcase + 1):
