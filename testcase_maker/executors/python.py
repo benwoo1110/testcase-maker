@@ -9,6 +9,10 @@ if TYPE_CHECKING:
 
 
 class PythonExecutor(Executor):
+    @property
+    def file_extension(self) -> str:
+        return "py"
+
     def compile(self, tempdir: Union["Path", str], source_filename: Union["Path", str]) -> Union["Path", str]:
         return source_filename
 

@@ -6,6 +6,10 @@ if TYPE_CHECKING:
 
 
 class Executor(ABC):
+    @property
+    def file_extension(self) -> str:
+        raise NotImplementedError
+
     def compile(self, tempdir: Union["Path", str], source_filename: Union["Path", str]) -> Union["Path", str]:
         raise NotImplementedError
 

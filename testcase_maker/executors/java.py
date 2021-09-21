@@ -7,6 +7,10 @@ if TYPE_CHECKING:
 
 
 class JavaExecutor(Executor):
+    @property
+    def file_extension(self) -> str:
+        return "java"
+
     def compile(self, tempdir: Union["Path", str], source_filename: Union["Path", str]) -> Union["Path", str]:
         pass
 
