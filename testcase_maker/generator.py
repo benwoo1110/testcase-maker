@@ -20,7 +20,8 @@ class TestcaseGenerator:
     answer_script: Path = attr.ib(default=None, converter=Path)  # TODO Handle if its None.
     script_executor: "Executor" = attr.ib(default=None)
     subtasks: List[Subtask] = attr.ib(factory=list)
-    # TODO Custom stdin and stdout file name format.
+    stdin_filename_format: str = attr.ib(default="{}-{}.in")
+    stdout_filename_format: str = attr.ib(default="{}-{}.out")
 
     def __attrs_post_init__(self):
         if not self.script_executor:
@@ -85,10 +86,10 @@ class TestcaseGenerator:
         pass
 
     def _stdin_path(self, subtask_name: str, testcase_no: int):
-        return self.output_dir.joinpath(f"{subtask_name}-{testcase_no}.in")
+        return self.output_dir.joinpath(self.stdin_filename_format.format(subtask_name, testcase_no))
 
     def _stdout_path(self, subtask_name: str, testcase_no: int):
-        return self.output_dir.joinpath(f"{subtask_name}-{testcase_no}.out")
+        return self.output_dir.joinpath(self.stdout_filename_format.format(subtask_name, testcase_no))
 
     def _execute_script(self, stdin: str) -> str:
         with tempfile.TemporaryDirectory() as tmpdir:
