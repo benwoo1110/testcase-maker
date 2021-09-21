@@ -4,13 +4,11 @@ import attr
 
 if TYPE_CHECKING:
     from testcase_maker.value import Value
-    from testcase_maker.values import ValueGroup
 
 
 @attr.define()
 class Subtask:
     name: str = attr.ib()
-    builder: "ValueGroup" = attr.ib()
     no_of_testcase: int = attr.ib()
     override_name_values: Dict = attr.ib(factory=dict)
 
