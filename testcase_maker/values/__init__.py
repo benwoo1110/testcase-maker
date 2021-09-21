@@ -1,4 +1,3 @@
-from .base import BaseValue, ValueContainer
 from .constant import Constant
 from .loop_value import LoopValue
 from .named_value import NamedValue

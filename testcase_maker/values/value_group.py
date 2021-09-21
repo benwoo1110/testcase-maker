@@ -2,17 +2,18 @@ from typing import List, Union, TYPE_CHECKING
 
 import attr
 
-from testcase_maker.values import BaseValue, Constant, LoopValue
+from testcase_maker.value import Value
+from testcase_maker.values import Constant, LoopValue
 
 if TYPE_CHECKING:
     from testcase_maker.resolver import Resolver
 
 
 @attr.define()
-class ValueGroup(BaseValue):
-    values: List[BaseValue] = attr.ib(factory=list)
+class ValueGroup(Value):
+    values: List[Value] = attr.ib(factory=list)
 
-    def add(self, value: BaseValue):
+    def add(self, value: Value):
         self.values.append(value)
 
     def space(self):
@@ -21,7 +22,7 @@ class ValueGroup(BaseValue):
     def newline(self):
         self.add(Constant("\n"))
 
-    def repeat(self, value: "BaseValue", amount: Union[BaseValue, int], delimiter: str):
+    def repeat(self, value: "Value", amount: Union[Value, int], delimiter: str):
         self.add(LoopValue(value, amount, delimiter))
 
     def generate(self, resolver: "Resolver") -> str:

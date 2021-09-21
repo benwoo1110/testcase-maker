@@ -6,7 +6,8 @@ import attr
 
 from testcase_maker.resolver import Resolver
 from testcase_maker.subtask import Subtask
-from testcase_maker.executors import BaseExecutor, PythonExecutor
+from testcase_maker.executor import Executor
+from testcase_maker.executors import PythonExecutor
 
 if TYPE_CHECKING:
     from testcase_maker.values import ValueGroup
@@ -16,7 +17,7 @@ if TYPE_CHECKING:
 class TestcaseGenerator:
     target_folder: Path = attr.ib(converter=Path)
     answer_script: Path = attr.ib(converter=Path)
-    script_executor: "BaseExecutor" = attr.ib(default=None)
+    script_executor: "Executor" = attr.ib(default=None)
     subtasks: List[Subtask] = attr.ib(factory=list)
 
     def __attrs_post_init__(self):

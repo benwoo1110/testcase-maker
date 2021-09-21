@@ -5,7 +5,7 @@ if TYPE_CHECKING:
     from pathlib import Path
 
 
-class BaseExecutor(ABC):
+class Executor(ABC):
     def compile(self, tempdir: Union["Path", str], source_filename: Union["Path", str]) -> Union["Path", str]:
         raise NotImplementedError
 

@@ -3,17 +3,17 @@ from typing import Any, TYPE_CHECKING, List, Union
 
 import attr
 
-from testcase_maker.values import BaseValue
+from testcase_maker.value import Value
 
 if TYPE_CHECKING:
     from testcase_maker.resolver import Resolver
 
 
 @attr.define()
-class RandomSample(BaseValue):
-    items: Union[BaseValue, List[Union[BaseValue, Any]]] = attr.ib()
-    amount: Union[BaseValue, int] = attr.ib()
-    delimiter: Union[BaseValue, str] = attr.ib()
+class RandomSample(Value):
+    items: Union[Value, List[Union[Value, Any]]] = attr.ib()
+    amount: Union[Value, int] = attr.ib()
+    delimiter: Union[Value, str] = attr.ib()
 
     def generate(self, resolver: "Resolver") -> Any:
         items = resolver.resolve(self.items, list)
