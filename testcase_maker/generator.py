@@ -16,7 +16,7 @@ if TYPE_CHECKING:
 @attr.define()
 class TestcaseGenerator:
     values: "ValueGroup" = attr.ib()
-    output_dir: Path = attr.ib(converter=Path)  # TODO Add a default path.
+    output_dir: Path = attr.ib(default=Path("./testcases/"), converter=Path)
     answer_script: Path = attr.ib(default=None, converter=Path)
     script_executor: "Executor" = attr.ib(default=None)
     subtasks: List[Subtask] = attr.ib(factory=list)
