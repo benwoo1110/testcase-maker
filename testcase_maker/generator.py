@@ -15,8 +15,12 @@ if TYPE_CHECKING:
 
 @attr.define()
 class TestcaseGenerator:
+    """The generator class."""
+
     values: "ValueGroup" = attr.ib()
+    """Values structure to build the testcase on."""
     output_dir: Path = attr.ib(default=Path("./testcases/"), converter=Path)
+    """Folder where the generated testcase files will be saved."""
     answer_script: Path = attr.ib(default=None, converter=Path)
     script_executor: "Executor" = attr.ib(default=None)
     subtasks: List[Subtask] = attr.ib(factory=list)
@@ -28,6 +32,16 @@ class TestcaseGenerator:
             self.script_executor = get_executor_for_script(self.answer_script)
 
     def new_subtask(self, no_of_testcase: int, name: str = None) -> Subtask:
+        """
+        Test
+
+        parameters:
+            no_of_testcase: Test
+            name: Test
+
+        returns:
+            Test
+        """
         if not name:
             name = str(len(self.subtasks) + 1)
 

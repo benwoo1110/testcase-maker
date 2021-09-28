@@ -4,3 +4,55 @@ repo_name: benwoo1110/testcase-maker
 
 theme:
   name: material
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: red
+      toggle:
+        icon: material/weather-night
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: red
+      toggle:
+        icon: material/weather-sunny
+        name: Switch to light mode
+
+plugins:
+  - search
+  - autorefs
+  - mkdocstrings:
+      handlers:
+        python:
+          selection:
+            inherited_members: true
+            filters:
+              - "!^_"
+          rendering:
+            members_order: source
+            show_bases: True
+            group_by_category: False
+            heading_level: 2
+            show_if_no_docstring: True
+      watch:
+        - testcase_maker
+
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.highlight:
+      linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.superfences
+  - pymdownx.emoji:
+      emoji_index: !!python/name:materialx.emoji.twemoji
+      emoji_generator: !!python/name:materialx.emoji.to_svg
+  - pymdownx.keys
+  - pymdownx.saneheaders
+  - pymdownx.smartsymbols
+  - pymdownx.tabbed
+  - pymdownx.tasklist
+  - pymdownx.tilde
+  - toc:
+      permalink: true
+      toc_depth: 3
