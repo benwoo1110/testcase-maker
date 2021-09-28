@@ -26,9 +26,4 @@ class ValueGroup(Value):
         self.add(LoopValue(value, amount, delimiter))
 
     def generate(self, resolver: "Resolver") -> str:
-        output_string = ""
-        for value in self.values:
-            resolved_value = resolver.resolve(value)
-            output_string += str(resolved_value)
-
-        return output_string
+        return "".join([str(resolver.resolve(value)) for value in self.values])
