@@ -1,0 +1,6 @@
+site_name: testcase-maker
+repo_url: https://github.com/benwoo1110/testcase-maker
+repo_name: benwoo1110/testcase-maker
+
+theme:
+  name: material
