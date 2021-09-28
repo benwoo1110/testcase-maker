@@ -30,7 +30,6 @@ values.add(LoopValue(
 
 # Generate the testcases
 generator = TestcaseGenerator(values=values, answer_script="./solution.py")
-generator.new_subtask(5)
 generator.generate()
 ```
 

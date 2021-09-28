@@ -54,7 +54,7 @@ class TestcaseGenerator:
         self.generate_stdout(override)
 
     def generate_stdin(self, override: bool = False):
-        self.output_dir.mkdir(parents=True, exist_ok=True)
+        self._pre_generation()
 
         for subtask in self.subtasks:
             for testcase_no in range(1, subtask.no_of_testcase + 1):
@@ -74,7 +74,7 @@ class TestcaseGenerator:
                 print(f"Saved '{stdin_file}'.")
 
     def generate_stdout(self, override: bool = False):
-        self.output_dir.mkdir(parents=True, exist_ok=True)
+        self._pre_generation()
 
         if not self.answer_script:
             print("Unable to generate stdout as there is no answer script specified.")
@@ -103,6 +103,11 @@ class TestcaseGenerator:
 
     def validate(self):
         pass
+
+    def _pre_generation(self):
+        self.output_dir.mkdir(parents=True, exist_ok=True)
+        if len(self.subtasks) < 1:
+            self.new_subtask(5)
 
     def _stdin_path(self, subtask_name: str, testcase_no: int):
         return self.output_dir.joinpath(self.stdin_filename_format.format(subtask_name, testcase_no))
