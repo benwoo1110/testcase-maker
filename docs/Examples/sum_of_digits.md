@@ -1,6 +1,6 @@
 # Sum of Digits
 
-Testcase generation code for [Sum of Digits]( https://www.codechef.com/problems/FLOW006) task on CodeChef.
+Testcase generation code for [Sum of Digits](https://www.codechef.com/problems/FLOW006) task on CodeChef.
 
 
 ## `generate.py`
@@ -31,7 +31,7 @@ values.add(LoopValue(
 # Generate the testcases
 generator = TestcaseGenerator(values=values, answer_script="./solution.py")
 generator.new_subtask(5)
-generator.generate(override=True)
+generator.generate()
 ```
 
 ## `solution.py`
