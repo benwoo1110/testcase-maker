@@ -70,6 +70,7 @@ class TestcaseGenerator:
 
                 with open(stdin_file, "w", newline="\n") as input_buffer:
                     input_buffer.write(stdin)
+                    input_buffer.write("\n")
                 print(f"Saved '{stdin_file}'.")
 
     def generate_stdout(self, override: bool = False):
