@@ -30,9 +30,10 @@ class TestcaseGenerator:
     values: "ValueGroup" = attr.ib()
     output_directory: Path = attr.ib(default="./testcases/", converter=Path)
     answer_script: Path = attr.ib(default=None, converter=optional(Path))
-    subtasks: List[Subtask] = attr.ib(factory=list)
     stdin_filename_format: str = attr.ib(default="{}-{}.in")
     stdout_filename_format: str = attr.ib(default="{}-{}.out")
+
+    _subtasks: List[Subtask] = attr.ib(factory=list)
 
     def __attrs_post_init__(self):
         if not self.script_executor and self.answer_script:
@@ -50,10 +51,10 @@ class TestcaseGenerator:
             The new subtask object.
         """
         if not name:
-            name = str(len(self.subtasks) + 1)
+            name = str(len(self._subtasks) + 1)
 
         subtask = Subtask(name, no_of_testcase)
-        self.subtasks.append(subtask)
+        self._subtasks.append(subtask)
         return subtask
 
     def generate(self, override: bool = False):
@@ -75,7 +76,7 @@ class TestcaseGenerator:
         """
         self._pre_generation()
 
-        for subtask in self.subtasks:
+        for subtask in self._subtasks:
             for testcase_no in range(1, subtask.no_of_testcase + 1):
                 print(f"Generating stdin for subtask '{subtask.name}', testcase '{testcase_no}'...")
 
@@ -110,7 +111,7 @@ class TestcaseGenerator:
 
         executor = get_executor_for_script(self.answer_script)
 
-        for subtask in self.subtasks:
+        for subtask in self._subtasks:
             for testcase_no in range(1, subtask.no_of_testcase + 1):
                 print(f"Generating stdout for subtask '{subtask.name}', testcase '{testcase_no}'...")
 
@@ -142,7 +143,7 @@ class TestcaseGenerator:
 
     def _pre_generation(self):
         self.output_directory.mkdir(parents=True, exist_ok=True)
-        if len(self.subtasks) < 1:
+        if len(self._subtasks) < 1:
             self.new_subtask(5)
 
     def _stdin_path(self, subtask_name: str, testcase_no: int):
