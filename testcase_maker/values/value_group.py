@@ -11,7 +11,7 @@ if TYPE_CHECKING:
 
 @attr.define()
 class ValueGroup(Value):
-    values: List[Any, "Value"] = attr.ib(factory=list)
+    values: List[Union[Any, "Value"]] = attr.ib(factory=list)
 
     def add(self, value: Union[Any, "Value"]):
         self.values.append(value)

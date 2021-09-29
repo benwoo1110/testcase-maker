@@ -35,10 +35,6 @@ class TestcaseGenerator:
 
     _subtasks: List[Subtask] = attr.ib(factory=list)
 
-    def __attrs_post_init__(self):
-        if not self.script_executor and self.answer_script:
-            self.script_executor = get_executor_for_script(self.answer_script)
-
     def new_subtask(self, no_of_testcase: int, name: str = None) -> Subtask:
         """
         Creates a new subtask to work with.
@@ -154,6 +150,7 @@ class TestcaseGenerator:
 
     def _execute_script(self, stdin: str, executor: "Executor") -> str:
         with tempfile.TemporaryDirectory() as tmpdir:
+            tmpdir = Path(tmpdir)
             exec_filename = executor.compile(tmpdir, self.answer_script)
             stdout = executor.execute(exec_filename, stdin).decode("UTF-8")
         return stdout
