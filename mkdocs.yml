@@ -2,6 +2,21 @@ site_name: testcase-maker
 repo_url: https://github.com/benwoo1110/testcase-maker
 repo_name: benwoo1110/testcase-maker
 
+nav:
+  - 'index.md'
+  - 'getting_started.md'
+  - 'advanced_usage.md'
+  - 'API Reference':
+      - 'API Reference/executor_manager.md'
+      - 'API Reference/executors.md'
+      - 'API Reference/generator.md'
+      - 'API Reference/resolver.md'
+      - 'API Reference/subtask.md'
+      - 'API Reference/values.md'
+  - 'Examples':
+      - 'Examples/sum_of_digits.md'
+      - 'Examples/split_the_string.md'
+
 theme:
   name: material
   palette:
