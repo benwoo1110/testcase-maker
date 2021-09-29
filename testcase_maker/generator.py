@@ -152,5 +152,5 @@ class TestcaseGenerator:
         with tempfile.TemporaryDirectory() as tmpdir:
             tmpdir = Path(tmpdir)
             exec_filename = executor.compile(tmpdir, self.answer_script)
-            stdout = executor.execute(exec_filename, stdin).decode("UTF-8")
+            stdout = executor.execute(exec_filename, stdin)
         return stdout
