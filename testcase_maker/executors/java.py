@@ -7,6 +7,11 @@ if TYPE_CHECKING:
 
 
 class JavaExecutor(Executor):
+    """
+    !!! danger "Notice"
+            Not implemented yet.
+    """
+
     @property
     def file_extension(self) -> str:
         return "java"

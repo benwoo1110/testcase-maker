@@ -7,6 +7,11 @@ if TYPE_CHECKING:
 
 
 class CPPExecutor(Executor):
+    """
+    !!! danger "Notice"
+            Not implemented yet.
+    """
+
     @property
     def file_extension(self) -> str:
         return "cpp"

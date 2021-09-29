@@ -16,12 +16,20 @@ if TYPE_CHECKING:
 
 @attr.define()
 class TestcaseGenerator:
-    """The generator class."""
+    """
+    The generator class.
+
+    Attributes:
+        values ValueGroup: Structure to build the testcase on.
+        output_dir Path: Folder where the generated testcase files will be saved.
+        answer_script Path: Script that can solve the testcase to produce the correct stdout.
+        script_executor Executor:
+        stdin_filename_format str: Filename used for stdin. There is 2 placeholders: subtask name and testcase number.
+        stdout_filename_format str: Filename used for stdout. There is 2 placeholders: subtask name and testcase number.
+    """
 
     values: "ValueGroup" = attr.ib()
-    """Values structure to build the testcase on."""
     output_dir: Path = attr.ib(default="./testcases/", converter=Path)
-    """Folder where the generated testcase files will be saved."""
     answer_script: Path = attr.ib(default=None, converter=optional(Path))
     script_executor: "Executor" = attr.ib(default=None)
     subtasks: List[Subtask] = attr.ib(factory=list)
@@ -34,14 +42,14 @@ class TestcaseGenerator:
 
     def new_subtask(self, no_of_testcase: int, name: str = None) -> Subtask:
         """
-        Test
+        Creates a new subtask to work with.
 
-        parameters:
-            no_of_testcase: Test
-            name: Test
+        Args:
+            no_of_testcase: The number of testcases to generate for this subtask.
+            name: Name of the subtask. To be reflected in testcase filename.
 
         returns:
-            Test
+            The new subtask object.
         """
         if not name:
             name = str(len(self.subtasks) + 1)
@@ -51,10 +59,22 @@ class TestcaseGenerator:
         return subtask
 
     def generate(self, override: bool = False):
+        """
+        Generates both stdin and stdout for testcases.
+
+        Args:
+            override: Set to ``True`` if you want to override existing testcase files (if any). Defaults to ``False``.
+        """
         self.generate_stdin(override)
         self.generate_stdout(override)
 
     def generate_stdin(self, override: bool = False):
+        """
+        Generates stdin for testcases.
+
+        Args:
+            override: Set to ``True`` if you want to override existing testcase files (if any). Defaults to ``False``.
+        """
         self._pre_generation()
 
         for subtask in self.subtasks:
@@ -75,6 +95,15 @@ class TestcaseGenerator:
                 print(f"Saved '{stdin_file}'.")
 
     def generate_stdout(self, override: bool = False):
+        """
+        Generates stdout for testcases.
+
+        !!! danger "Notice"
+            Valid stdin files must be generated and present first.
+
+        Args:
+            override: Set to ``True`` if you want to override existing testcase files (if any). Defaults to ``False``.
+        """
         self._pre_generation()
 
         if not self.answer_script:
@@ -103,6 +132,12 @@ class TestcaseGenerator:
                 print(f"Saved '{stdout_file}'")
 
     def validate(self):
+        """
+        Checks that answer script matches the stdout for the respective stdin.
+
+        !!! danger "Notice"
+            Not implemented yet.
+        """
         pass
 
     def _pre_generation(self):
