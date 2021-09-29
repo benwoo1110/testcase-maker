@@ -22,8 +22,5 @@ class ValueGroup(Value):
     def newline(self):
         self.add(Constant("\n"))
 
-    def repeat(self, value: "Value", amount: Union[Value, int], delimiter: str):
-        self.add(LoopValue(value, amount, delimiter))
-
     def generate(self, resolver: "Resolver") -> str:
         return "".join([str(resolver.resolve(value)) for value in self.values])
