@@ -28,7 +28,7 @@ class TestcaseGenerator:
     """
 
     values: "ValueGroup" = attr.ib()
-    output_dir: Path = attr.ib(default="./testcases/", converter=Path)
+    output_directory: Path = attr.ib(default="./testcases/", converter=Path)
     answer_script: Path = attr.ib(default=None, converter=optional(Path))
     subtasks: List[Subtask] = attr.ib(factory=list)
     stdin_filename_format: str = attr.ib(default="{}-{}.in")
@@ -141,15 +141,15 @@ class TestcaseGenerator:
         pass
 
     def _pre_generation(self):
-        self.output_dir.mkdir(parents=True, exist_ok=True)
+        self.output_directory.mkdir(parents=True, exist_ok=True)
         if len(self.subtasks) < 1:
             self.new_subtask(5)
 
     def _stdin_path(self, subtask_name: str, testcase_no: int):
-        return self.output_dir.joinpath(self.stdin_filename_format.format(subtask_name, testcase_no))
+        return self.output_directory.joinpath(self.stdin_filename_format.format(subtask_name, testcase_no))
 
     def _stdout_path(self, subtask_name: str, testcase_no: int):
-        return self.output_dir.joinpath(self.stdout_filename_format.format(subtask_name, testcase_no))
+        return self.output_directory.joinpath(self.stdout_filename_format.format(subtask_name, testcase_no))
 
     def _execute_script(self, stdin: str, executor: "Executor") -> str:
         with tempfile.TemporaryDirectory() as tmpdir:
