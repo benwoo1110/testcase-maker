@@ -3,6 +3,7 @@ from pathlib import Path
 from typing import List, TYPE_CHECKING
 
 import attr
+from attr.converters import optional
 
 from testcase_maker.executor_manager import get_executor_for_script
 from testcase_maker.resolver import Resolver
@@ -19,16 +20,16 @@ class TestcaseGenerator:
 
     values: "ValueGroup" = attr.ib()
     """Values structure to build the testcase on."""
-    output_dir: Path = attr.ib(default=Path("./testcases/"), converter=Path)
+    output_dir: Path = attr.ib(default="./testcases/", converter=Path)
     """Folder where the generated testcase files will be saved."""
-    answer_script: Path = attr.ib(default=None, converter=Path)
+    answer_script: Path = attr.ib(default=None, converter=optional(Path))
     script_executor: "Executor" = attr.ib(default=None)
     subtasks: List[Subtask] = attr.ib(factory=list)
     stdin_filename_format: str = attr.ib(default="{}-{}.in")
     stdout_filename_format: str = attr.ib(default="{}-{}.out")
 
     def __attrs_post_init__(self):
-        if not self.script_executor:
+        if not self.script_executor and self.answer_script:
             self.script_executor = get_executor_for_script(self.answer_script)
 
     def new_subtask(self, no_of_testcase: int, name: str = None) -> Subtask:
