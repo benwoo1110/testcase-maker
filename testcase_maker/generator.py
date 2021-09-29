@@ -23,7 +23,6 @@ class TestcaseGenerator:
         values ValueGroup: Structure to build the testcase on.
         output_dir Path: Folder where the generated testcase files will be saved.
         answer_script Path: Script that can solve the testcase to produce the correct stdout.
-        script_executor Executor:
         stdin_filename_format str: Filename used for stdin. There is 2 placeholders: subtask name and testcase number.
         stdout_filename_format str: Filename used for stdout. There is 2 placeholders: subtask name and testcase number.
     """
@@ -31,7 +30,6 @@ class TestcaseGenerator:
     values: "ValueGroup" = attr.ib()
     output_dir: Path = attr.ib(default="./testcases/", converter=Path)
     answer_script: Path = attr.ib(default=None, converter=optional(Path))
-    script_executor: "Executor" = attr.ib(default=None)
     subtasks: List[Subtask] = attr.ib(factory=list)
     stdin_filename_format: str = attr.ib(default="{}-{}.in")
     stdout_filename_format: str = attr.ib(default="{}-{}.out")
@@ -110,6 +108,8 @@ class TestcaseGenerator:
             print("Unable to generate stdout as there is no answer script specified.")
             return
 
+        executor = get_executor_for_script(self.answer_script)
+
         for subtask in self.subtasks:
             for testcase_no in range(1, subtask.no_of_testcase + 1):
                 print(f"Generating stdout for subtask '{subtask.name}', testcase '{testcase_no}'...")
@@ -126,7 +126,7 @@ class TestcaseGenerator:
                     print(f"Skipped '{stdout_file}' as file already exist.")
                     continue
 
-                stdout = self._execute_script(stdin)
+                stdout = self._execute_script(stdin, executor)
                 with open(stdout_file, "w", newline="\n") as output_buffer:
                     output_buffer.write(stdout)
                 print(f"Saved '{stdout_file}'")
@@ -151,8 +151,8 @@ class TestcaseGenerator:
     def _stdout_path(self, subtask_name: str, testcase_no: int):
         return self.output_dir.joinpath(self.stdout_filename_format.format(subtask_name, testcase_no))
 
-    def _execute_script(self, stdin: str) -> str:
+    def _execute_script(self, stdin: str, executor: "Executor") -> str:
         with tempfile.TemporaryDirectory() as tmpdir:
-            exec_filename = self.script_executor.compile(tmpdir, self.answer_script)
-            stdout = self.script_executor.execute(exec_filename, stdin).decode("UTF-8")
+            exec_filename = executor.compile(tmpdir, self.answer_script)
+            stdout = executor.execute(exec_filename, stdin).decode("UTF-8")
         return stdout
