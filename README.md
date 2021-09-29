@@ -16,16 +16,16 @@
 **\*\*NOTE:  The library is a work-in-progress, there may be breaking changes.**
 
 When creating competitive programming challenges, we will also need to create testcases. These testcases mey be very
-large with millions of numbers, which makes it near impossible to do manually.
+large with millions of numbers, which makes it near impossible to do manually. This library will allow you to 
+automatic this process. It provides an intuitive API to build, generate and validate testcases. 
 
-This library will allow you to automatic this process. It provides an **intuitive API** to build, generate and validate 
-testcases. **Testcase Maker** aims to be:
+#### **Testcase Maker** aims to be:
 
 * Very modular and expandable API structure
 * Fast and efficient
 * Extensive documentation and examples
 
-Main features are:
+#### **Testcase Maker** is feature-packed with:
 
 * Highly customisable values to suit large range of challenges
 * Separate constraints for subtasks
@@ -101,4 +101,4 @@ print(" ".join([str(x) for x in numbers]))
 
 ## Advanced
 There is still so many things you can do with this library. For more advanced and detailed usage guide, please refer to 
-the [official documentation here](https://testcase-maker.readthedocs.io/en/stable/).
+the [official documentation](https://testcase-maker.readthedocs.io/en/stable/)!
