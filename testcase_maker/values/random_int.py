@@ -1,5 +1,5 @@
 import random
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Union
 
 import attr
 
@@ -11,8 +11,8 @@ if TYPE_CHECKING:
 
 @attr.define()
 class RandomInt(Value):
-    min: int = attr.ib()
-    max: int = attr.ib()
+    min: Union[int, "Value"] = attr.ib()
+    max: Union[int, "Value"] = attr.ib()
 
     def generate(self, resolver: "Resolver") -> int:
         min_range = resolver.resolve(self.min, int)

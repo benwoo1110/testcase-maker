@@ -10,9 +10,8 @@ if TYPE_CHECKING:
 
 
 @attr.define()
-class RandomItem(Value):
-    items: List[Union[Value, Any]] = attr.ib()
+class RandomChoice(Value):
+    items: List[Union[Any, "Value"]] = attr.ib()  # TODO Make this resolvable?
 
     def generate(self, resolver: "Resolver") -> Any:
-        item = random.choice(self.items)
-        return resolver.resolve(item)
+        return resolver.resolve(random.choice(self.items))

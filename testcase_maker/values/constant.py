@@ -1,4 +1,4 @@
-from typing import Any, TYPE_CHECKING
+from typing import Any, TYPE_CHECKING, Union
 
 import attr
 
@@ -10,7 +10,7 @@ if TYPE_CHECKING:
 
 @attr.define()
 class Constant(Value):
-    constant: Any = attr.ib()
+    value: Union[Any, "Value"] = attr.ib()
 
     def generate(self, resolver: "Resolver") -> Any:
-        return resolver.resolve(self.constant)
+        return resolver.resolve(self.value)

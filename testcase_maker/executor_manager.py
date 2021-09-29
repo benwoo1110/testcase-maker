@@ -13,7 +13,7 @@ def register_executor(executor: Executor, override: bool = False) -> Executor:
     if executor.file_extension in _registered_executors and not override:
         raise ValueError(
             f"Executor with extension '{executor.file_extension}' already exist. Set override to True to "
-            f"override existing registered executor with the same file extension."
+            f"replace existing registered executor with the same file extension."
         )
 
     _registered_executors[executor.file_extension] = executor

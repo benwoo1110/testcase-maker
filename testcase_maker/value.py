@@ -11,8 +11,3 @@ if TYPE_CHECKING:
 class Value(ABC):
     def generate(self, resolver: "Resolver") -> Any:
         raise NotImplementedError
-
-
-@attr.define()
-class ValueContainer(Value, ABC):
-    value: Value = attr.ib()

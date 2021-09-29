@@ -1,4 +1,4 @@
-from typing import Dict, TYPE_CHECKING
+from typing import Dict, TYPE_CHECKING, Any, Union
 
 import attr
 
@@ -10,7 +10,7 @@ if TYPE_CHECKING:
 class Subtask:
     name: str = attr.ib()
     no_of_testcase: int = attr.ib()
-    override_name_values: Dict = attr.ib(factory=dict)
+    override_name_values: Dict[str, Union[Any, "Value"]] = attr.ib(factory=dict)
 
-    def override_value(self, name: str, value: "Value"):
+    def override_value(self, name: str, value: Union[Any, "Value"]):
         self.override_name_values[name] = value

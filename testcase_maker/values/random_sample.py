@@ -11,12 +11,12 @@ if TYPE_CHECKING:
 
 @attr.define()
 class RandomSample(Value):
-    items: Union[Value, List[Union[Value, Any]]] = attr.ib()
-    amount: Union[Value, int] = attr.ib()
-    delimiter: Union[Value, str] = attr.ib()
+    items: Union[List[Union[Value, Any]], "Value"] = attr.ib()
+    amount: Union[int, "Value"] = attr.ib()
+    delimiter: Union[str, "Value"] = attr.ib(default=" ")
 
     def generate(self, resolver: "Resolver") -> Any:
-        items = resolver.resolve(self.items, list)
+        items = resolver.resolve(self.items)
         amount = resolver.resolve(self.amount, int)
         delimiter = resolver.resolve(self.delimiter, str)
-        return delimiter.join([str(n) for n in random.sample(items, amount)])
+        return delimiter.join([str(item) for item in random.sample(items, amount)])

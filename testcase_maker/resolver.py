@@ -8,18 +8,18 @@ from testcase_maker.values import NamedValue
 
 @attr.define()
 class Resolver:
-    _override_name_values: Dict = attr.ib(factory=dict)
-    _resolved_values: Dict = attr.ib(factory=dict)
+    _override_name_values: Dict[str, "Value"] = attr.ib(factory=dict)
+    _resolved_values: Dict[str, Any] = attr.ib(factory=dict)
 
-    def get_override(self, name: Any, default: Optional[Value] = None):
+    def get_override(self, name: str, default: Optional[Value] = None) -> "Value":
         return self._override_name_values.get(name, default)
 
-    def get_value(self, var_name: Any) -> Optional[Any]:
-        if var_name not in self._resolved_values:
-            raise ValueError(f"No such resolved variable '{var_name}'.")
-        return self._resolved_values[var_name]
+    def get_value(self, name: str) -> Optional[Any]:
+        if name not in self._resolved_values:
+            raise ValueError(f"No such resolved variable '{name}'.")
+        return self._resolved_values[name]
 
-    def resolve(self, value: Union[Value, Any], check_type: type = None):
+    def resolve(self, value: Union[Value, Any], check_type: type = None) -> Any:
         if isinstance(value, NamedValue):
             target_value = self.get_override(value.name, value.value)
             resolved_value = self.resolve(target_value, check_type)

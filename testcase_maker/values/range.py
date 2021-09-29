@@ -14,8 +14,8 @@ class Range(Value):
     max: int = attr.ib()
     step: int = attr.ib(default=1)
 
-    def generate(self, resolver: "Resolver") -> list:
+    def generate(self, resolver: "Resolver") -> range:
         min_range = resolver.resolve(self.min, int)
         max_range = resolver.resolve(self.max, int)
         step = resolver.resolve(self.step, int)
-        return list(range(min_range, max_range, step))
+        return range(min_range, max_range, step)

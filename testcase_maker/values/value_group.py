@@ -1,9 +1,9 @@
-from typing import List, Union, TYPE_CHECKING
+from typing import List, Union, TYPE_CHECKING, Any
 
 import attr
 
 from testcase_maker.value import Value
-from testcase_maker.values import Constant, LoopValue
+from testcase_maker.values import Constant
 
 if TYPE_CHECKING:
     from testcase_maker.resolver import Resolver
@@ -11,9 +11,9 @@ if TYPE_CHECKING:
 
 @attr.define()
 class ValueGroup(Value):
-    values: List[Value] = attr.ib(factory=list)
+    values: List[Any, "Value"] = attr.ib(factory=list)
 
-    def add(self, value: Value):
+    def add(self, value: Union[Any, "Value"]):
         self.values.append(value)
 
     def space(self):
