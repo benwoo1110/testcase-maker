@@ -10,7 +10,9 @@
 ## About
 **\*\*NOTE:  The library is a work-in-progress, there may be breaking changes.**
 
-When creating competitive programming challenges, we will also need to create testcases. These testcases mey be very large with millions of numbers, which makes it near impossible to do manually. This library will allow you to automatic this process. It provides an intuitive API to build, generate and validate testcases. 
+When creating competitive programming challenges, we will also need to create testcases. These testcases may be very 
+large with millions of numbers, which makes it near impossible to do manually. This library will allow you to automatic 
+this process. It provides an intuitive API to build, generate and validate testcases. 
 
 #### **Testcase Maker** aims to be:
 
@@ -31,7 +33,8 @@ pip install testcase-maker
 ```
 
 ## Basics Usage
-You can get start generating testcases with just a few lines of code. Here is simple an example of generating testcases with N number of random integers, i.
+You can get start generating testcases with just a few lines of code. Here is simple an example of generating testcases 
+with N number of random integers, i.
 ```python
 from testcase_maker.generator import TestcaseGenerator
 from testcase_maker.values import ValueGroup, NamedValue, RandomInt, LoopValue, ValueRef
@@ -52,7 +55,8 @@ generator = TestcaseGenerator(values=values)
 generator.generate_stdin()
 ```
 
-Some challenge has subtasks with testcases requiring different constraints. Continuing from the previous example, here is how you can do it with **Testcase Maker**.
+Some challenge has subtasks with testcases requiring different constraints. Continuing from the previous example, here 
+is how you can do it with **Testcase Maker**.
 ```python
 # ...replacing generator code from the simple example...
 # Generate stdin testcases
@@ -91,4 +95,5 @@ print(" ".join([str(x) for x in numbers]))
 ```
 
 ## Advanced
-There is still so many things you can do with this library. For more advanced and detailed usage guide, please refer to the [official documentation](https://testcase-maker.readthedocs.io/en/stable/)!
+There is still so many things you can do with this library. For more advanced and detailed usage guide, please refer to 
+the [official documentation](https://testcase-maker.readthedocs.io/en/stable/)!
