@@ -7,6 +7,9 @@
     <a href="https://testcase-maker.readthedocs.io/en/stable/" target="_blank">
         <img src="https://img.shields.io/readthedocs/testcase-maker" alt="docs" />
     </a>
+    <a href="https://www.python.org/">
+        <img src="https://img.shields.io/pypi/pyversions/testcase-maker" alt="python version" />
+    </a>
     <a href="LICENSE">
         <img src="https://img.shields.io/github/license/benwoo1110/testcase-maker" alt="license" />
     </a>
