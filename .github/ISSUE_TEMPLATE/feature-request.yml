@@ -1,0 +1,19 @@
+name: Feature Request
+description: Suggest a new feature!
+title: "[Idea]: "
+assignees:
+  - benwoo1110
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to generate new ideas!
+  - type: textarea
+    id: what-idea
+    attributes:
+      label: What is the new idea you have?
+      description: Also tell us, how this feature will benefit you?
+      placeholder: Tell us more about your idea!
+      value: "A idea brewing!"
+    validations:
+      required: true
