@@ -1,5 +1,6 @@
 # Testcase Maker
 
+[![Downloads](https://static.pepy.tech/personalized-badge/testcase-maker?period=total&units=international_system&left_color=grey&right_color=lightgrey&left_text=Downloads)](https://pepy.tech/project/testcase-maker)
 [![pypi](https://img.shields.io/pypi/v/testcase-maker)](https://pypi.org/project/testcase-maker/)
 [![docs](https://img.shields.io/readthedocs/testcase-maker)](https://testcase-maker.readthedocs.io/en/stable/)
 [![python](https://img.shields.io/pypi/pyversions/testcase-maker)](https://www.python.org/)
