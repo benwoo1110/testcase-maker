@@ -91,7 +91,7 @@ class TestcaseGenerator:
                     input_buffer.write(stdin)
                     input_buffer.write("\n")
                 end = timer()
-                print(f"Saved '{stdin_file}'. Took {end-start} seconds .")
+                print(f"Saved '{stdin_file}'. Took {end-start} seconds.")
 
     def generate_stdout(self, override: bool = False):
         """
