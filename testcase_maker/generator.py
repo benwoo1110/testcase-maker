@@ -2,6 +2,8 @@ import tempfile
 from pathlib import Path
 from typing import List, TYPE_CHECKING
 
+from timeit import default_timer as timer
+
 import attr
 from attr.converters import optional
 
@@ -74,6 +76,7 @@ class TestcaseGenerator:
 
         for subtask in self._subtasks:
             for testcase_no in range(1, subtask.no_of_testcase + 1):
+                start = timer()
                 print(f"Generating stdin for subtask '{subtask.name}', testcase '{testcase_no}'...")
 
                 stdin_file = self._stdin_path(subtask.name, testcase_no)
@@ -87,7 +90,8 @@ class TestcaseGenerator:
                 with open(stdin_file, "w", newline="\n") as input_buffer:
                     input_buffer.write(stdin)
                     input_buffer.write("\n")
-                print(f"Saved '{stdin_file}'.")
+                end = timer()
+                print(f"Saved '{stdin_file}'. Took {end-start} seconds .")
 
     def generate_stdout(self, override: bool = False):
         """
