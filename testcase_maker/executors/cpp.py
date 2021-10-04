@@ -22,5 +22,5 @@ class CPPExecutor(Executor):
         return tempdir.joinpath(f"{source_filename.stem}.exe")
 
     def execute(self, exec_filename: Union["Path", str], stdin: str) -> bytes:
-        args = [str(exec_filename.stem) + ".exe"]
+        args = [str(exec_filename)]
         return run_command(args, stdin, exec_filename.parent)
