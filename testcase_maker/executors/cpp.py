@@ -24,3 +24,4 @@ class CPPExecutor(Executor):
     def execute(self, exec_filename: Union["Path", str], stdin: str) -> bytes:
         args = [str(exec_filename)]
         return run_command(args, stdin, exec_filename.parent)
+    
