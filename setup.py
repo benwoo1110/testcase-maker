@@ -28,7 +28,7 @@ setup(
     long_description_content_type="text/markdown",
     url="https://github.com/benwoo1110/testcase-maker",
     packages=find_packages(),
-    python_requires=">=3.9",
+    python_requires=">=3.8",
     classifiers=[
         "License :: OSI Approved :: MIT License",
         "Natural Language :: English",
