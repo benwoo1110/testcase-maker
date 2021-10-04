@@ -113,6 +113,7 @@ class TestcaseGenerator:
 
         for subtask in self._subtasks:
             for testcase_no in range(1, subtask.no_of_testcase + 1):
+                start = timer()
                 print(f"Generating stdout for subtask '{subtask.name}', testcase '{testcase_no}'...")
 
                 stdin_file = self._stdin_path(subtask.name, testcase_no)
@@ -130,7 +131,9 @@ class TestcaseGenerator:
                 stdout = self._execute_script(stdin, executor)
                 with open(stdout_file, "w", newline="\n") as output_buffer:
                     output_buffer.write(stdout)
-                print(f"Saved '{stdout_file}'")
+              
+                end = timer()
+                print(f"Saved '{stdout_file}'. Took {end-start} seconds.")
 
     def validate(self):
         """
