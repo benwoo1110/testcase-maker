@@ -16,7 +16,7 @@ if TYPE_CHECKING:
     from testcase_maker.values import ValueGroup
 
 import logging 
-logging.basicConfig(filename='generator.log', level=logging.DEBUG, format='%(asctime)s %(message)s', datefmt='%m/%d/%Y %I:%M:%S %p')
+logging.basicConfig(level=logging.INFO, format='%(asctime)s %(message)s', datefmt='%m/%d/%Y %I:%M:%S %p')
 
 @attr.define()
 class TestcaseGenerator:
