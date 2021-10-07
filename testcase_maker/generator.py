@@ -29,6 +29,7 @@ class TestcaseGenerator:
         answer_script Path: Script that can solve the testcase to produce the correct stdout.
         stdin_filename_format str: Filename used for stdin. There is 2 placeholders: subtask name and testcase number.
         stdout_filename_format str: Filename used for stdout. There is 2 placeholders: subtask name and testcase number.
+        newline: Preferred newline format used for stdin and stdout files. Defaults to \n.
     """
 
     values: "ValueGroup" = attr.ib()
@@ -36,6 +37,7 @@ class TestcaseGenerator:
     answer_script: Path = attr.ib(default=None, converter=optional(Path))
     stdin_filename_format: str = attr.ib(default="{}-{}.in")
     stdout_filename_format: str = attr.ib(default="{}-{}.out")
+    newline: str = attr.ib(default="\n")
 
     _subtasks: List[Subtask] = attr.ib(factory=list)
 
@@ -89,9 +91,9 @@ class TestcaseGenerator:
                 resolver = Resolver(subtask.override_name_values)
                 stdin = resolver.resolve(self.values)
 
-                with open(stdin_file, "w", newline="\n") as input_buffer:
+                with open(stdin_file, "w", newline=self.newline) as input_buffer:
                     input_buffer.write(stdin)
-                    input_buffer.write("\n")
+                    input_buffer.write(self.newline)
                 end = timer()
                 logging.info(f"Saved '{stdin_file}'. Took {end-start} seconds.")
 
@@ -122,7 +124,7 @@ class TestcaseGenerator:
                 if not stdin_file.is_file():
                     logging.info(f"Skipped as stdin '{stdin_file}' does not exist.")
                     continue
-                with open(stdin_file, "r", newline="\n") as input_buffer:
+                with open(stdin_file, "r", newline=self.newline) as input_buffer:
                     stdin = input_buffer.read()
 
                 stdout_file = self._stdout_path(subtask.name, testcase_no)
@@ -131,7 +133,7 @@ class TestcaseGenerator:
                     continue
 
                 stdout = self._execute_script(stdin, executor)
-                with open(stdout_file, "w", newline="\n") as output_buffer:
+                with open(stdout_file, "w", newline=self.newline) as output_buffer:
                     output_buffer.write(stdout)
               
                 end = timer()
