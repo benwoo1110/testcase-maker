@@ -39,6 +39,9 @@ class TestcaseGenerator:
 
     _subtasks: List[Subtask] = attr.ib(factory=list)
 
+    newline: str = attr.ib(default="\n")
+
+
     def new_subtask(self, no_of_testcase: int, name: str = None) -> Subtask:
         """
         Creates a new subtask to work with.
@@ -89,9 +92,9 @@ class TestcaseGenerator:
                 resolver = Resolver(subtask.override_name_values)
                 stdin = resolver.resolve(self.values)
 
-                with open(stdin_file, "w", newline="\n") as input_buffer:
+                with open(stdin_file, "w", newline=self.newline) as input_buffer:
                     input_buffer.write(stdin)
-                    input_buffer.write("\n")
+                    input_buffer.write(self.newline)
                 end = timer()
                 logging.info(f"Saved '{stdin_file}'. Took {end-start} seconds.")
 
@@ -122,7 +125,7 @@ class TestcaseGenerator:
                 if not stdin_file.is_file():
                     logging.info(f"Skipped as stdin '{stdin_file}' does not exist.")
                     continue
-                with open(stdin_file, "r", newline="\n") as input_buffer:
+                with open(stdin_file, "r", newline=self.newline) as input_buffer:
                     stdin = input_buffer.read()
 
                 stdout_file = self._stdout_path(subtask.name, testcase_no)
@@ -131,7 +134,7 @@ class TestcaseGenerator:
                     continue
 
                 stdout = self._execute_script(stdin, executor)
-                with open(stdout_file, "w", newline="\n") as output_buffer:
+                with open(stdout_file, "w", newline=self.newline) as output_buffer:
                     output_buffer.write(stdout)
               
                 end = timer()
