@@ -29,6 +29,7 @@ class TestcaseGenerator:
         answer_script Path: Script that can solve the testcase to produce the correct stdout.
         stdin_filename_format str: Filename used for stdin. There is 2 placeholders: subtask name and testcase number.
         stdout_filename_format str: Filename used for stdout. There is 2 placeholders: subtask name and testcase number.
+        newline: Preferred newline format used for stdin and stdout files. Defaults to \n.
     """
 
     values: "ValueGroup" = attr.ib()
@@ -36,11 +37,9 @@ class TestcaseGenerator:
     answer_script: Path = attr.ib(default=None, converter=optional(Path))
     stdin_filename_format: str = attr.ib(default="{}-{}.in")
     stdout_filename_format: str = attr.ib(default="{}-{}.out")
-
-    _subtasks: List[Subtask] = attr.ib(factory=list)
-
     newline: str = attr.ib(default="\n")
 
+    _subtasks: List[Subtask] = attr.ib(factory=list)
 
     def new_subtask(self, no_of_testcase: int, name: str = None) -> Subtask:
         """
