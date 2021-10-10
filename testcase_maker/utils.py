@@ -1,9 +1,6 @@
-import time
 from pathlib import Path
 from subprocess import Popen, PIPE
 from typing import List
-
-import attr
 
 
 def run_command(args: List[str], stdin: str = None, cwd: "Path" = None):
@@ -17,19 +14,3 @@ def run_command(args: List[str], stdin: str = None, cwd: "Path" = None):
         raise Exception("Error executing answer script.")
 
     return out[0].decode("utf-8")
-
-
-class Timer:
-    start_time: float = attr.ib(default=-1, init=False)
-    end_time: float = attr.ib(default=-1, init=False)
-
-    @property
-    def duration(self) -> float:
-        return self.end_time - self.start_time
-
-    def start(self):
-        self.start_time = time.perf_counter()
-
-    def end(self) -> float:
-        self.end_time = time.perf_counter()
-        return self.duration
