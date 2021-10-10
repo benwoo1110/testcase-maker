@@ -162,7 +162,8 @@ class TestcaseGenerator:
 
     def _execute_script(self, stdin: str, executor: "Executor") -> str:
         with tempfile.TemporaryDirectory() as tmpdir:
+            # TODO Copy script file over to tempdir first.
             tmpdir = Path(tmpdir)
             exec_filename = executor.compile(tmpdir, self.answer_script)
-            stdout = executor.execute(exec_filename, stdin)
+            stdout = executor.execute(tmpdir, exec_filename, stdin)
         return stdout

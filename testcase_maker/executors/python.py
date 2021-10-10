@@ -22,6 +22,6 @@ class PythonExecutor(Executor):
         run_command(args, cwd=tempdir)
         return next(tempdir.joinpath("__pycache__").glob('*.pyc'))
 
-    def execute(self, exec_filename: Union["Path", str], stdin: str) -> bytes:
+    def execute(self, tempdir: Union["Path", str], exec_filename: Union["Path", str], stdin: str) -> str:
         args = [sys.executable, str(exec_filename)]
         return run_command(args, stdin)

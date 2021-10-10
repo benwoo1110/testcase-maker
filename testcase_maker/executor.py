@@ -13,5 +13,5 @@ class Executor(ABC):
     def compile(self, tempdir: Union["Path", str], source_filename: Union["Path", str]) -> Union["Path", str]:
         raise NotImplementedError
 
-    def execute(self, exec_filename: Union["Path", str], stdin: str) -> bytes:
+    def execute(self, tempdir: Union["Path", str], exec_filename: Union["Path", str], stdin: str) -> str:
         raise NotImplementedError

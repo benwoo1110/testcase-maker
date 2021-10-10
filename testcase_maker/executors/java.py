@@ -22,6 +22,6 @@ class JavaExecutor(Executor):
         run_command(args, cwd=tempdir)
         return tempdir.joinpath(f"{source_filename.stem}.class")
 
-    def execute(self, exec_filename: Union["Path", str], stdin: str) -> bytes:
+    def execute(self, tempdir: Union["Path", str], exec_filename: Union["Path", str], stdin: str) -> str:
         args = ["java", str(exec_filename.stem)]
         return run_command(args, stdin, exec_filename.parent)
