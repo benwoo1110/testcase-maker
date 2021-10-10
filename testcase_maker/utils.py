@@ -1,3 +1,4 @@
+from enum import Enum
 from pathlib import Path
 from subprocess import Popen, PIPE
 from typing import List, Optional
@@ -10,7 +11,13 @@ def run_command(args: List[str], stdin: Optional[str] = None, cwd: Optional["Pat
     process = Popen(args, stdout=PIPE, stdin=PIPE, stderr=PIPE, cwd=cwd)
     out = process.communicate(stdin)
     if out[1]:
-        print(out[1].decode(encode_type))
+        print(out[1].decode(encode_type))  # TODO Logging
         raise Exception("Error executing answer script.")
 
     return out[0].decode(encode_type)
+
+
+class NewlineTypes(Enum, str):
+    CRLF = r"\r\n"
+    LF = r"\n"
+    CR = r"\r"

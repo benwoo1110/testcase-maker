@@ -1,6 +1,6 @@
 import tempfile
 from pathlib import Path
-from typing import List, TYPE_CHECKING
+from typing import List, TYPE_CHECKING, Union
 
 from timeit import default_timer as timer
 
@@ -11,6 +11,7 @@ from testcase_maker.executor_manager import get_executor_for_script
 from testcase_maker.resolver import Resolver
 from testcase_maker.subtask import Subtask
 from testcase_maker.executor import Executor
+from testcase_maker.utils import NewlineTypes
 
 if TYPE_CHECKING:
     from testcase_maker.values import ValueGroup
@@ -37,7 +38,7 @@ class TestcaseGenerator:
     answer_script: Path = attr.ib(default=None, converter=optional(Path))
     stdin_filename_format: str = attr.ib(default="{}-{}.in")
     stdout_filename_format: str = attr.ib(default="{}-{}.out")
-    newline: str = attr.ib(default="\n")
+    newline: Union[str, NewlineTypes] = attr.ib(default=NewlineTypes.LF)
 
     _subtasks: List[Subtask] = attr.ib(factory=list)
 
