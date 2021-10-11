@@ -13,7 +13,7 @@ with open(path.join(HERE, PACKAGE_NAME, "constants.py"), encoding="utf-8") as fp
 
 
 with open(path.join(HERE, "README.md"), "r", encoding="UTF-8") as f:
-    README = f.read()
+    README = f.read().replace("\r\n", "\n")  # Stupid newline issue when displaying on pypi website.
 
 
 EXTRAS = {
