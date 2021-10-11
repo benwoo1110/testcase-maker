@@ -102,3 +102,6 @@ print(" ".join([str(x) for x in numbers]))
 ## Advanced
 There are still so many other things you can do with this library. For more advanced and detailed usage guide, please refer to 
 the [official documentation](https://testcase-maker.readthedocs.io/en/stable/)!
+
+## License
+This project is license with MIT. Read full details at [LICENSE](LICENSE) file.
