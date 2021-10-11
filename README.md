@@ -37,8 +37,12 @@ pip install testcase-maker
 You can get started generating testcases with just a few lines of code. Here is a simple example of generating testcases 
 with N number of random integers, i.
 ```python
+import logging
+
 from testcase_maker.generator import TestcaseGenerator
 from testcase_maker.values import ValueGroup, NamedValue, RandomInt, LoopValue, ValueRef
+
+logging.basicConfig(level=logging.INFO)
 
 values = ValueGroup()
 # Define the N value.

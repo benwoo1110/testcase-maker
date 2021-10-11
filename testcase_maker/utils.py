@@ -1,7 +1,12 @@
+import logging
 from enum import Enum
 from pathlib import Path
 from subprocess import Popen, PIPE
 from typing import List, Optional
+
+from testcase_maker.constants import LOGGER_NAME
+
+log = logging.getLogger(LOGGER_NAME)
 
 
 def run_command(args: List[str], stdin: Optional[str] = None, cwd: Optional["Path"] = None, encode_type: str = "UTF-8"):
@@ -11,8 +16,8 @@ def run_command(args: List[str], stdin: Optional[str] = None, cwd: Optional["Pat
     process = Popen(args, stdout=PIPE, stdin=PIPE, stderr=PIPE, cwd=cwd)
     out = process.communicate(stdin)
     if out[1]:
-        print(out[1].decode(encode_type))  # TODO Logging
-        raise Exception("Error executing answer script.")
+        log.error(out[1].decode(encode_type))
+        log.error("Error executing answer script.")
 
     return out[0].decode(encode_type)
 

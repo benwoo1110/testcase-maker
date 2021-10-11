@@ -7,6 +7,7 @@ from timeit import default_timer as timer
 import attr
 from attr.converters import optional
 
+from testcase_maker.constants import LOGGER_NAME
 from testcase_maker.executor_manager import get_executor_for_script
 from testcase_maker.resolver import Resolver
 from testcase_maker.subtask import Subtask
@@ -16,8 +17,11 @@ from testcase_maker.utils import NewlineTypes
 if TYPE_CHECKING:
     from testcase_maker.values import ValueGroup
 
-import logging 
-logging.basicConfig(level=logging.INFO, format='%(asctime)s %(message)s', datefmt='%m/%d/%Y %I:%M:%S %p')
+import logging
+
+
+log = logging.getLogger(LOGGER_NAME)
+
 
 @attr.define()
 class TestcaseGenerator:
@@ -82,11 +86,11 @@ class TestcaseGenerator:
         for subtask in self._subtasks:
             for testcase_no in range(1, subtask.no_of_testcase + 1):
                 start = timer()
-                logging.info(f"Generating stdin for subtask '{subtask.name}', testcase '{testcase_no}'...")
+                log.info(f"Generating stdin for subtask '{subtask.name}', testcase '{testcase_no}'...")
 
                 stdin_file = self._stdin_path(subtask.name, testcase_no)
                 if stdin_file.is_file() and not override:
-                    logging.info(f"Skipped '{stdin_file}' as file already exist.")
+                    log.info(f"Skipped '{stdin_file}' as file already exist.")
                     continue
 
                 resolver = Resolver(subtask.override_name_values)
@@ -96,7 +100,7 @@ class TestcaseGenerator:
                     input_buffer.write(stdin)
                     input_buffer.write(self.newline)
                 end = timer()
-                logging.info(f"Saved '{stdin_file}'. Took {end-start} seconds.")
+                log.info(f"Saved '{stdin_file}'. Took {end-start} seconds.")
 
     def generate_stdout(self, override: bool = False):
         """
@@ -111,7 +115,7 @@ class TestcaseGenerator:
         self._pre_generation()
 
         if not self.answer_script:
-            logging.error("Unable to generate stdout as there is no answer script specified.")
+            log.error("Unable to generate stdout as there is no answer script specified.")
             return
 
         executor = get_executor_for_script(self.answer_script)
@@ -119,18 +123,18 @@ class TestcaseGenerator:
         for subtask in self._subtasks:
             for testcase_no in range(1, subtask.no_of_testcase + 1):
                 start = timer()
-                logging.info(f"Generating stdout for subtask '{subtask.name}', testcase '{testcase_no}'...")
+                log.info(f"Generating stdout for subtask '{subtask.name}', testcase '{testcase_no}'...")
 
                 stdin_file = self._stdin_path(subtask.name, testcase_no)
                 if not stdin_file.is_file():
-                    logging.info(f"Skipped as stdin '{stdin_file}' does not exist.")
+                    log.info(f"Skipped as stdin '{stdin_file}' does not exist.")
                     continue
                 with open(stdin_file, "r", newline=self.newline) as input_buffer:
                     stdin = input_buffer.read()
 
                 stdout_file = self._stdout_path(subtask.name, testcase_no)
                 if stdout_file.is_file() and not override:
-                    logging.info(f"Skipped '{stdout_file}' as file already exist.")
+                    log.info(f"Skipped '{stdout_file}' as file already exist.")
                     continue
 
                 stdout = self._execute_script(stdin, executor)
@@ -138,7 +142,7 @@ class TestcaseGenerator:
                     output_buffer.write(stdout)
               
                 end = timer()
-                logging.info(f"Saved '{stdout_file}'. Took {end-start} seconds.")
+                log.info(f"Saved '{stdout_file}'. Took {end-start} seconds.")
 
     def validate(self):
         """

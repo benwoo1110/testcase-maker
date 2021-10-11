@@ -5,10 +5,13 @@ Testcase generation code for [Split the Str Ing](https://www.codechef.com/proble
 ## `generate.py`
 
 ```python
+import logging
 import string
 
 from testcase_maker.generator import TestcaseGenerator
 from testcase_maker.values import ValueGroup, NamedValue, RandomInt, LoopValue, ValueRef, RandomChoice
+
+logging.basicConfig(level=logging.INFO)
 
 # Firstly, create a new container to make the testcase stdin structure.
 values = ValueGroup()
