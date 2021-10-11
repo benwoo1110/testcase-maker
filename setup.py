@@ -1,27 +1,36 @@
+import re
 from codecs import open
-
+from os import path
 from setuptools import find_packages, setup
 
 
-with open("README.md", "r", encoding="UTF-8") as f:
+PACKAGE_NAME = "testcase_maker"
+HERE = path.abspath(path.dirname(__file__))
+
+
+with open(path.join(HERE, PACKAGE_NAME, "constants.py"), encoding="utf-8") as fp:
+    VERSION = re.search('__version__ = "([^"]+)"', fp.read()).group(1)
+
+
+with open(path.join(HERE, "README.md"), "r", encoding="UTF-8") as f:
     README = f.read()
 
 
 EXTRAS = {
     "lint": ["black", "flake8", "isort"],
+    "dev": ["lint"]
 }
-EXTRAS["dev"] = EXTRAS["lint"]
 
 
 setup(
     name="testcase-maker",
-    version="0.2.0.post1",
+    version=VERSION,
     author="benwoo1110",
     author_email="wben1110@gmail.com",
     description="Competitive programming testcases made easy!",
     extras_require=EXTRAS,
     install_requires=[
-        "attrs~=21.2.0",
+        "attrs~=21.2.0"
     ],
     license="MIT License",
     long_description=README,
