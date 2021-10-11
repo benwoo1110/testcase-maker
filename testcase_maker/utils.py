@@ -17,7 +17,7 @@ def run_command(args: List[str], stdin: Optional[str] = None, cwd: Optional["Pat
     return out[0].decode(encode_type)
 
 
-class NewlineTypes(Enum, str):
-    CRLF = r"\r\n"
-    LF = r"\n"
-    CR = r"\r"
+class NewlineTypes(str, Enum):
+    CRLF = "\r\n"
+    LF = "\n"
+    CR = "\r"
