@@ -18,7 +18,7 @@ class JavaExecutor(Executor):
         return "java"
 
     def compile(self, tempdir: Union["Path", str], source_filename: Union["Path", str]) -> Union["Path", str]:
-        args = ["javac", str(source_filename), "-d", str(tempdir)]
+        args = ["javac", str(source_filename.absolute()), "-d", str(tempdir)]
         run_command(args, cwd=tempdir)
         return tempdir.joinpath(f"{source_filename.stem}.class")
 
