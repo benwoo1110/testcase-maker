@@ -84,7 +84,7 @@ class TestcaseGenerator:
         self._pre_generation()
 
         for subtask in self._subtasks:
-            for testcase_no in range(1, subtask.no_of_testcase + 1):
+            for testcase_no, overrides in subtask.iterate():
                 start = timer()
                 log.info(f"Generating stdin for subtask '{subtask.name}', testcase '{testcase_no}'...")
 
@@ -93,7 +93,7 @@ class TestcaseGenerator:
                     log.info(f"Skipped '{stdin_file}' as file already exist.")
                     continue
 
-                resolver = Resolver(subtask.override_name_values)
+                resolver = Resolver(overrides)
                 stdin = resolver.resolve(self.values)
 
                 with open(stdin_file, "w", newline=self.newline) as input_buffer:
