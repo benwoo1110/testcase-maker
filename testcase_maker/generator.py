@@ -169,5 +169,8 @@ class TestcaseGenerator:
             # TODO Copy script file over to tempdir first.
             tmpdir = Path(tmpdir)
             exec_filename = executor.compile(tmpdir, self.answer_script)
+            start = timer()
             stdout = executor.execute(tmpdir, exec_filename, stdin)
+            end = timer()
+            log.info(f"Executed solution script in {end-start} seconds.")
         return stdout
