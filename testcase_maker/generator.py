@@ -147,11 +147,41 @@ class TestcaseGenerator:
     def validate(self):
         """
         Checks that answer script matches the stdout for the respective stdin.
-
-        !!! danger "Notice"
-            Not implemented yet.
         """
-        pass
+        if not self.answer_script:
+            log.error("Unable to validate stdout as there is no answer script specified.")
+            return
+
+        executor = get_executor_for_script(self.answer_script)
+
+        for subtask in self._subtasks:
+            for testcase_no in range(1, subtask.no_of_testcase + 1):
+                start = timer()
+                log.info(f"Validating stdout for subtask '{subtask.name}', testcase '{testcase_no}'...")
+
+                stdin_file = self._stdin_path(subtask.name, testcase_no)
+                if not stdin_file.is_file():
+                    log.warning(f"Skipped as stdin '{stdin_file}' does not exist.")
+                    continue
+                with open(stdin_file, "r", newline=self.newline) as input_buffer:
+                    stdin = input_buffer.read()
+
+                stdout_file = self._stdout_path(subtask.name, testcase_no)
+                if not stdout_file.is_file():
+                    log.warning(f"Skipped as stdout '{stdout_file}' does not exist.")
+                    continue
+
+                with open(stdout_file, "r", newline=self.newline) as output_buffer:
+                    stdout = output_buffer.read()
+
+                actual_stdout = self._execute_script(stdin, executor)
+                if actual_stdout != stdout:
+                    log.warning(f"Incorrect stdout detected, got {actual_stdout} instead of {stdout}.")
+                else:
+                    log.info(f"Correct!")
+
+                end = timer()
+                log.info(f"Validated '{stdout_file}'. Took {end-start} seconds.")
 
     def _pre_generation(self):
         self.output_directory.mkdir(parents=True, exist_ok=True)
