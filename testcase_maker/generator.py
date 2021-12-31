@@ -1,6 +1,6 @@
 import tempfile
 from pathlib import Path
-from typing import List, TYPE_CHECKING, Union
+from typing import Callable, List, TYPE_CHECKING, Union
 
 from timeit import default_timer as timer
 
@@ -118,31 +118,30 @@ class TestcaseGenerator:
             log.error("Unable to generate stdout as there is no answer script specified.")
             return
 
-        executor = get_executor_for_script(self.answer_script)
+        with get_executor_for_script(self.answer_script) as executor:
+            for subtask in self._subtasks:
+                for testcase_no in range(1, subtask.no_of_testcase + 1):
+                    start = timer()
+                    log.info(f"Generating stdout for subtask '{subtask.name}', testcase '{testcase_no}'...")
 
-        for subtask in self._subtasks:
-            for testcase_no in range(1, subtask.no_of_testcase + 1):
-                start = timer()
-                log.info(f"Generating stdout for subtask '{subtask.name}', testcase '{testcase_no}'...")
+                    stdin_file = self._stdin_path(subtask.name, testcase_no)
+                    if not stdin_file.is_file():
+                        log.info(f"Skipped as stdin '{stdin_file}' does not exist.")
+                        continue
+                    with open(stdin_file, "r", newline=self.newline) as input_buffer:
+                        stdin = input_buffer.read()
 
-                stdin_file = self._stdin_path(subtask.name, testcase_no)
-                if not stdin_file.is_file():
-                    log.info(f"Skipped as stdin '{stdin_file}' does not exist.")
-                    continue
-                with open(stdin_file, "r", newline=self.newline) as input_buffer:
-                    stdin = input_buffer.read()
+                    stdout_file = self._stdout_path(subtask.name, testcase_no)
+                    if stdout_file.is_file() and not override:
+                        log.info(f"Skipped '{stdout_file}' as file already exist.")
+                        continue
 
-                stdout_file = self._stdout_path(subtask.name, testcase_no)
-                if stdout_file.is_file() and not override:
-                    log.info(f"Skipped '{stdout_file}' as file already exist.")
-                    continue
-
-                stdout = self._execute_script(stdin, executor)
-                with open(stdout_file, "w", newline=self.newline) as output_buffer:
-                    output_buffer.write(stdout)
-              
-                end = timer()
-                log.info(f"Saved '{stdout_file}'. Took {end-start} seconds.")
+                    stdout = self._execute_script(stdin, executor)
+                    with open(stdout_file, "w", newline=self.newline) as output_buffer:
+                        output_buffer.write(stdout)
+                
+                    end = timer()
+                    log.info(f"Saved '{stdout_file}'. Took {end-start} seconds.")
 
     def validate(self):
         """
@@ -152,36 +151,35 @@ class TestcaseGenerator:
             log.error("Unable to validate stdout as there is no answer script specified.")
             return
 
-        executor = get_executor_for_script(self.answer_script)
+        with get_executor_for_script(self.answer_script) as executor:
+            for subtask in self._subtasks:
+                for testcase_no in range(1, subtask.no_of_testcase + 1):
+                    start = timer()
+                    log.info(f"Validating stdout for subtask '{subtask.name}', testcase '{testcase_no}'...")
 
-        for subtask in self._subtasks:
-            for testcase_no in range(1, subtask.no_of_testcase + 1):
-                start = timer()
-                log.info(f"Validating stdout for subtask '{subtask.name}', testcase '{testcase_no}'...")
+                    stdin_file = self._stdin_path(subtask.name, testcase_no)
+                    if not stdin_file.is_file():
+                        log.warning(f"Skipped as stdin '{stdin_file}' does not exist.")
+                        continue
+                    with open(stdin_file, "r", newline=self.newline) as input_buffer:
+                        stdin = input_buffer.read()
 
-                stdin_file = self._stdin_path(subtask.name, testcase_no)
-                if not stdin_file.is_file():
-                    log.warning(f"Skipped as stdin '{stdin_file}' does not exist.")
-                    continue
-                with open(stdin_file, "r", newline=self.newline) as input_buffer:
-                    stdin = input_buffer.read()
+                    stdout_file = self._stdout_path(subtask.name, testcase_no)
+                    if not stdout_file.is_file():
+                        log.warning(f"Skipped as stdout '{stdout_file}' does not exist.")
+                        continue
 
-                stdout_file = self._stdout_path(subtask.name, testcase_no)
-                if not stdout_file.is_file():
-                    log.warning(f"Skipped as stdout '{stdout_file}' does not exist.")
-                    continue
+                    with open(stdout_file, "r", newline=self.newline) as output_buffer:
+                        stdout = output_buffer.read()
 
-                with open(stdout_file, "r", newline=self.newline) as output_buffer:
-                    stdout = output_buffer.read()
+                    actual_stdout = self._execute_script(stdin, executor)
+                    if actual_stdout.rstrip() != stdout.rstrip():
+                        log.warning(f"Incorrect stdout detected, got {actual_stdout} instead of {stdout}.")
+                    else:
+                        log.info(f"Correct!")
 
-                actual_stdout = self._execute_script(stdin, executor)
-                if actual_stdout != stdout:
-                    log.warning(f"Incorrect stdout detected, got {actual_stdout} instead of {stdout}.")
-                else:
-                    log.info(f"Correct!")
-
-                end = timer()
-                log.info(f"Validated '{stdout_file}'. Took {end-start} seconds.")
+                    end = timer()
+                    log.info(f"Validated '{stdout_file}'. Took {end-start} seconds.")
 
     def _pre_generation(self):
         self.output_directory.mkdir(parents=True, exist_ok=True)
@@ -194,13 +192,9 @@ class TestcaseGenerator:
     def _stdout_path(self, subtask_name: str, testcase_no: int):
         return self.output_directory.joinpath(self.stdout_filename_format.format(subtask_name, testcase_no))
 
-    def _execute_script(self, stdin: str, executor: "Executor") -> str:
-        with tempfile.TemporaryDirectory() as tmpdir:
-            # TODO Copy script file over to tempdir first.
-            tmpdir = Path(tmpdir)
-            exec_filename = executor.compile(tmpdir, self.answer_script)
-            start = timer()
-            stdout = executor.execute(tmpdir, exec_filename, stdin)
-            end = timer()
-            log.info(f"Executed solution script in {end-start} seconds.")
+    def _execute_script(self, stdin: str, executor: Callable[[str], str]) -> str:
+        start = timer()
+        stdout = executor(stdin)
+        end = timer()
+        log.info(f"Executed solution script in {end-start} seconds.")
         return stdout

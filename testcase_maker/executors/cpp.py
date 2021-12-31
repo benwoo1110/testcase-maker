@@ -12,15 +12,15 @@ class CPPExecutor(Executor):
     Run your answer script in C++!
     """
 
-    @property
-    def file_extension(self) -> str:
-        return "cpp"
+    @staticmethod
+    def file_extension() -> str:
+        return ".cpp"
 
-    def compile(self, tempdir: Union["Path", str], source_filename: Union["Path", str]) -> Union["Path", str]:
-        args = ["g++", "-o", str(source_filename.stem), str(source_filename.absolute())]
-        run_command(args, cwd=tempdir)
-        return tempdir.joinpath(f"{source_filename.stem}.exe")
+    def compile(self) -> "Path":
+        args = ["g++", "-o", str(self.source_file.stem), str(self.source_file.absolute())]
+        run_command(args, cwd=self.tempdir)
+        return self.tempdir.joinpath(f"{self.source_file.stem}.exe")
 
-    def execute(self, tempdir: Union["Path", str], exec_filename: Union["Path", str], stdin: str) -> str:
-        args = [str(exec_filename)]
-        return run_command(args, stdin, exec_filename.parent)
+    def execute(self, stdin: str) -> str:
+        args = [str(self.compiled_file)]
+        return run_command(args, stdin, self.compiled_file.parent)

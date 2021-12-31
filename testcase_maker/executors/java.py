@@ -13,15 +13,15 @@ class JavaExecutor(Executor):
     Run your answer script in java!
     """
 
-    @property
-    def file_extension(self) -> str:
-        return "java"
+    @staticmethod
+    def file_extension() -> str:
+        return ".java"
 
-    def compile(self, tempdir: Union["Path", str], source_filename: Union["Path", str]) -> Union["Path", str]:
-        args = ["javac", str(source_filename.absolute()), "-d", str(tempdir)]
-        run_command(args, cwd=tempdir)
-        return tempdir.joinpath(f"{source_filename.stem}.class")
+    def compile(self) -> "Path":
+        args = ["javac", str(self.source_file.absolute()), "-d", str(self.tempdir)]
+        run_command(args, cwd=self.tempdir)
+        return self.tempdir.joinpath(f"{self.source_file.stem}.class")
 
-    def execute(self, tempdir: Union["Path", str], exec_filename: Union["Path", str], stdin: str) -> str:
-        args = ["java", str(exec_filename.stem)]
-        return run_command(args, stdin, exec_filename.parent)
+    def execute(self, stdin: str) -> str:
+        args = ["java", str(self.compiled_file.stem)]
+        return run_command(args, stdin, self.compiled_file.parent)

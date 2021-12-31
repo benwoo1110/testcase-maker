@@ -2,14 +2,14 @@ import logging
 from enum import Enum
 from pathlib import Path
 from subprocess import Popen, PIPE
-from typing import List, Optional
+from typing import List, Optional, Union
 
 from testcase_maker.constants import LOGGER_NAME
 
 log = logging.getLogger(LOGGER_NAME)
 
 
-def run_command(args: List[str], stdin: Optional[str] = None, cwd: Optional["Path"] = None, encode_type: str = "UTF-8"):
+def run_command(args: List[str], stdin: Optional[str] = None, cwd: Optional[Union[Path, str]] = None, encode_type: str = "UTF-8"):
     if stdin:
         stdin = stdin.encode()
 

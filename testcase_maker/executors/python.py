@@ -11,17 +11,21 @@ if TYPE_CHECKING:
 
 
 class PythonExecutor(Executor):
-    @property
-    def file_extension(self) -> str:
-        return "py"
+    """
+    Run your answer script in python!
+    """
 
-    def compile(self, tempdir: Union["Path", str], source_filename: Union["Path", str]) -> Union["Path", str]:
-        copy_source = tempdir.joinpath(source_filename.name)
-        shutil.copy(source_filename, copy_source)
+    @staticmethod
+    def file_extension() -> str:
+        return ".py"
+
+    def compile(self) -> "Path":
+        copy_source = self.tempdir.joinpath(self.source_file.name)
+        shutil.copy(self.source_file, copy_source)
         args = [sys.executable, "-m", "compileall", str(copy_source)]
-        run_command(args, cwd=tempdir)
-        return next(tempdir.joinpath("__pycache__").glob('*.pyc'))
+        run_command(args, cwd=self.tempdir)
+        return next(self.tempdir.joinpath("__pycache__").glob('*.pyc'))
 
-    def execute(self, tempdir: Union["Path", str], exec_filename: Union["Path", str], stdin: str) -> str:
-        args = [sys.executable, str(exec_filename)]
+    def execute(self, stdin: str) -> str:
+        args = [sys.executable, str(self.compiled_file)]
         return run_command(args, stdin)
